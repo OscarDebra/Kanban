@@ -19,10 +19,10 @@ services:
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
-      - DB_NAME=kanban
-      - DB_USER=kanban
-      - DB_PASSWORD=changeme
-      - JWT_SECRET=changeme_also
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
       - UPLOAD_PATH=/uploads
     volumes:
       - /mnt/usb/uploads:/uploads
@@ -35,9 +35,9 @@ services:
     container_name: kanban-postgres
     restart: unless-stopped
     environment:
-      - POSTGRES_DB=kanban
-      - POSTGRES_USER=kanban
-      - POSTGRES_PASSWORD=changeme
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
       - /mnt/usb/postgres-data:/var/lib/postgresql/data
     command: >
@@ -47,7 +47,7 @@ services:
       -c max_connections=20
       -c effective_cache_size=128MB
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U kanban"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
       interval: 10s
       timeout: 5s
       retries: 5
